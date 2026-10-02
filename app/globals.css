@@ -1,0 +1,254 @@
+/* Tailwind + shadcn styles. Colors are set once here and used everywhere. */
+@import "tailwindcss";
+@import "tw-animate-css";
+
+:root {
+  --radius: 0.9rem;
+  --background: #f7f6f0;      /* soft off-white */
+  --foreground: #1d2621;      /* deep green-black "ink" */
+  --card: #ffffff;
+  --card-foreground: #1d2621;
+  --primary: #1f4d3a;         /* curry-leaf green buttons */
+  --primary-foreground: #f7efe0;
+  --secondary: #eef0e6;
+  --secondary-foreground: #1d2621;
+  --muted: #eef0e6;
+  --muted-foreground: #5f6b63;
+  --accent: #e6eee4;
+  --accent-foreground: #1d2621;
+  --border: #e1e2d5;
+  --input: #e1e2d5;
+  --ring: #c8462b;
+  --leaf: #1f4d3a;            /* curry-leaf green (top band, recipe card header) */
+  --leaf-foreground: #f7efe0; /* cream text on the green */
+  --chili: #c8462b;           /* chili red */
+  --band-accent: #f2a541;     /* saffron orange */
+  --veg: #2f7a3c;             /* the green "veg" mark */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #111714;
+    --foreground: #eef0e6;
+    --card: #19211d;
+    --card-foreground: #eef0e6;
+    --primary: #eef0e6;
+    --primary-foreground: #111714;
+    --secondary: #212b26;
+    --secondary-foreground: #eef0e6;
+    --muted: #212b26;
+    --muted-foreground: #a9b5ab;
+    --accent: #23302a;
+    --accent-foreground: #eef0e6;
+    --border: #2a3530;
+    --input: #2a3530;
+    --ring: #ff7a59;
+    --leaf: #24573f;
+    --leaf-foreground: #f7efe0;
+    --chili: #ff7a59;
+    --band-accent: #f6b25a;
+    --veg: #6cc583;
+    color-scheme: dark;
+  }
+}
+
+/* Lets Tailwind use the colors above, e.g. bg-leaf, text-chili, border-border */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-leaf: var(--leaf);
+  --color-leaf-foreground: var(--leaf-foreground);
+  --color-chili: var(--chili);
+  --color-band-accent: var(--band-accent);
+  --color-veg: var(--veg);
+  --radius-lg: var(--radius);
+  --font-display: var(--font-heading), Georgia, serif;
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-hand: var(--font-handwriting), "Segoe Print", cursive;
+}
+
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  html { scroll-behavior: smooth; }
+  body { @apply bg-background font-sans text-foreground antialiased; font-size: 17px; line-height: 1.65; }
+  h1, h2, h3 { text-wrap: balance; }
+}
+
+/* The wavy bottom edge of the yellow top band */
+.scallop::after {
+  content: ""; position: absolute; inset: auto 0 -1px 0; height: 28px; background: var(--background);
+  -webkit-mask: radial-gradient(14px at 50% 0, #0000 98%, #000) 50%/28px 100%;
+  mask: radial-gradient(14px at 50% 0, #0000 98%, #000) 50%/28px 100%;
+}
+
+/* ---- The thali photo tilts in gently when the page opens ---- */
+.thali-spin { transform: rotate(-2deg); animation: spin-in 1.2s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes spin-in { from { transform: rotate(-8deg) scale(.92); opacity: 0; } to { transform: rotate(-2deg); } }
+
+/* A plate of food in a color, used until real photos are added */
+.plate { border-radius: 50%; background: radial-gradient(circle, var(--food) 0 55%, #c3c8cc 56% 60%, #eceff1 61%); box-shadow: 0 14px 24px -10px rgba(0,0,0,.45); }
+.stripes { background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--food) 30%, var(--card)) 0 12px, color-mix(in srgb, var(--food) 22%, var(--card)) 12px 24px); }
+
+/* The green square "vegetarian" mark used on Indian food labels */
+.veg-mark { width: 16px; height: 16px; flex: none; border: 2px solid var(--veg); border-radius: 2px; display: grid; place-items: center; }
+.veg-mark::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--veg); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ---- Steam rising from the thali ---- */
+.steam { color: color-mix(in srgb, var(--leaf-foreground) 30%, transparent); }
+.steam path { stroke-dasharray: 160; animation: steam 3.6s ease-in-out infinite; opacity: 0; }
+@keyframes steam {
+  0% { stroke-dashoffset: 160; opacity: 0; transform: translateY(10px); }
+  35% { opacity: .9; }
+  100% { stroke-dashoffset: 0; opacity: 0; transform: translateY(-14px); }
+}
+
+/* ---- Spices floating around the thali ---- */
+.spice { animation: float 6s ease-in-out infinite; filter: drop-shadow(0 6px 6px rgba(60, 30, 0, .25)); }
+@keyframes float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+
+/* ---- Sections fading in on scroll ---- */
+.reveal { transition: opacity .8s ease, transform .8s cubic-bezier(.2, .7, .2, 1); }
+.reveal[data-state="waiting"] { opacity: 0; transform: translateY(28px); }
+.reveal[data-state="in"] { opacity: 1; transform: none; }
+
+/* ---- Block-print border: fades out at both ends ---- */
+.block-print {
+  opacity: .85;
+  -webkit-mask: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+  mask: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+}
+
+/* ---- Bandhani (Gujarati tie-dye) dots on the green top band ---- */
+.bandhani {
+  background-image:
+    radial-gradient(circle, color-mix(in srgb, var(--leaf-foreground) 16%, transparent) 2px, transparent 2.6px),
+    radial-gradient(circle, color-mix(in srgb, var(--band-accent) 22%, transparent) 1.6px, transparent 2.2px);
+  background-size: 34px 34px, 34px 34px;
+  background-position: 0 0, 17px 17px;
+}
+
+/* Page width: fills big screens (up to 1920px) instead of leaving wide empty sides. */
+@utility page-wrap {
+  margin-inline: auto;
+  width: min(100% - clamp(40px, 6vw, 160px), 1920px);
+}
+/* On very wide screens, make everything a little bigger so it doesn't look tiny. */
+html { font-size: clamp(16px, 0.5vw + 8.8px, 20px); }
+
+/* Cartoon cook in the hero (components/kitchen/cook.tsx). One toss every 2.8s. */
+.cook { --toss: 2.8s; }
+.cook-toss { transform-origin: 214px 230px; animation: cook-toss var(--toss) ease-in-out infinite; }
+@keyframes cook-toss {
+  0%, 55%, 100% { transform: rotate(0); }
+  64% { transform: rotate(9deg); }
+  72% { transform: rotate(-7deg); }
+  84% { transform: rotate(2deg); }
+}
+.cook-flick { transform-box: fill-box; transform-origin: 50% 100%; animation: cook-flick .5s ease-in-out infinite alternate; }
+@keyframes cook-flick { from { transform: scale(1, 1); } to { transform: scale(.85, 1.18); } }
+.cook-flare { opacity: 0; animation: cook-flare var(--toss) ease-out infinite; }
+@keyframes cook-flare {
+  0%, 66% { opacity: 0; }
+  71% { opacity: 1; }
+  86% { opacity: .7; }
+  96%, 100% { opacity: 0; }
+}
+.cook-bit { opacity: 0; animation: cook-bit var(--toss) ease-in-out infinite; }
+@keyframes cook-bit {
+  0%, 66% { opacity: 0; transform: translate(0, 0) rotate(0); }
+  69% { opacity: 1; }
+  80% { transform: translate(var(--dx), var(--dy)) rotate(200deg); }
+  92% { opacity: 1; transform: translate(0, 0) rotate(360deg); }
+  95%, 100% { opacity: 0; transform: translate(0, 0) rotate(360deg); }
+}
+.cook-bit > * { transform-box: fill-box; }
+.cook-spark { animation: cook-spark 2.2s ease-out infinite; opacity: 0; }
+@keyframes cook-spark {
+  0% { opacity: 0; transform: translate(0, 0); }
+  15% { opacity: 1; }
+  100% { opacity: 0; transform: translate(14px, -150px); }
+}
+.cook-glow { transform-box: fill-box; transform-origin: center; animation: cook-glow 1.4s ease-in-out infinite alternate; }
+@keyframes cook-glow { from { opacity: .6; transform: scale(.95); } to { opacity: 1; transform: scale(1.05); } }
+@media (prefers-reduced-motion: reduce) {
+  .cook-toss, .cook-flick, .cook-bit, .cook-spark, .cook-glow, .cook-flare { animation: none; }
+  .cook-flare { opacity: .8; }
+}
+
+/* Rangoli designs at the page sides (components/kitchen/rangoli-background.tsx). */
+.rangoli { opacity: .1; }
+@media (min-width: 1700px) { .rangoli { opacity: .24; } }
+.rangoli-left, .rangoli-right {
+  position: absolute; width: clamp(520px, 46vw, 1100px); aspect-ratio: 1;
+  translate: -50% -50%; animation: rangoli-turn 240s linear infinite;
+}
+.rangoli-left { left: 0; top: 38%; }
+.rangoli-right { left: 100%; top: 78%; animation-direction: reverse; }
+@keyframes rangoli-turn { to { rotate: 360deg; } }
+@media (prefers-reduced-motion: reduce) { .rangoli-left, .rangoli-right { animation: none; } }
+
+/* Cooking mode: each new step slides in gently. */
+.cook-step { animation: cook-step .35s ease-out; }
+@keyframes cook-step { from { opacity: 0; translate: 16px 0; } to { opacity: 1; translate: 0 0; } }
+@media (prefers-reduced-motion: reduce) { .cook-step { animation: none; } }
+
+/* Little kitchen walls at the far sides of the green top section, sized to fit the empty space. */
+.spice-shelves {
+  position: absolute; top: 110px; bottom: 90px; display: none; justify-content: center;
+  width: min(210px, calc((100vw - 1920px) / 2 - 40px));
+  margin-inline: 20px; pointer-events: none;
+  filter: drop-shadow(0 12px 16px rgba(0, 0, 0, .3));
+}
+@media (min-width: 2160px) { .spice-shelves { display: flex; } }
+.hang { animation: hang 4s ease-in-out infinite alternate; }
+@keyframes hang { from { rotate: -3deg; } to { rotate: 3deg; } }
+@media (prefers-reduced-motion: reduce) { .hang { animation: none; } }
+.bubble-text { animation: bubble-in .4s ease-out; }
+@keyframes bubble-in { from { opacity: 0; translate: 0 6px; } to { opacity: 1; translate: 0 0; } }
+@media (prefers-reduced-motion: reduce) { .bubble-text { animation: none; } }
+
+/* A finished timer gives a little shake, like a ringing kitchen timer. */
+.timer-ring { animation: timer-ring 1s ease-in-out infinite; }
+@keyframes timer-ring {
+  0%, 60%, 100% { rotate: 0deg; }
+  10%, 30%, 50% { rotate: -2deg; }
+  20%, 40% { rotate: 2deg; }
+}
+@media (prefers-reduced-motion: reduce) { .timer-ring { animation: none; } }
+
+/* Kitchen platform dividers (components/kitchen/kitchen-platform.tsx). */
+.platform-top {
+  height: 20px; border-radius: 6px;
+  /* speckled black granite */
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,.18) 0 1px, transparent 1.5px) 0 0 / 23px 11px,
+    radial-gradient(circle at 70% 60%, rgba(255,255,255,.12) 0 1px, transparent 1.5px) 0 0 / 31px 13px,
+    radial-gradient(circle at 40% 80%, rgba(242,165,65,.18) 0 1px, transparent 1.6px) 0 0 / 41px 9px,
+    linear-gradient(#3a3d42, #26282c);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.12), inset 0 -5px 0 rgba(0,0,0,.35), 0 14px 18px -12px rgba(0,0,0,.6);
+}
+.plat-steam { stroke-dasharray: 40; animation: plat-steam 3s ease-in-out infinite; opacity: 0; }
+@keyframes plat-steam {
+  0% { stroke-dashoffset: 40; opacity: 0; transform: translateY(6px); }
+  40% { opacity: .9; }
+  100% { stroke-dashoffset: 0; opacity: 0; transform: translateY(-10px); }
+}
+@media (prefers-reduced-motion: reduce) { .plat-steam { animation: none; opacity: .5; } }
